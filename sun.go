@@ -6,6 +6,12 @@ import (
 	"time"
 )
 
+// Error values if sun not rises or sets at speciefied date
+var (
+	ErrNoRise = errors.New("the sun never rises on this location (on the specified date)")
+	ErrNoSet  = errors.New("the sun never sets on this location (on the specified date)")
+)
+
 func dayOfYear(t time.Time) int {
 	d, m, y := t.Day(), int(t.Month()), t.Year()
 	N1 := 275 * m / 9
@@ -57,9 +63,9 @@ func calc(tt time.Time, lat, lon, zen float64, rising bool) (time.Time, error) {
 	cosH := (math.Cos(rad(zen)) - sinDec*math.Sin(rad(lat))) / (cosDec * math.Cos(rad(lat)))
 	switch {
 	case cosH > 1.0:
-		return time.Time{}, errors.New("the sun never rises on this location")
+		return time.Time{}, ErrNoRise
 	case cosH < -1.0:
-		return time.Time{}, errors.New("the sun never sets on this location")
+		return time.Time{}, ErrNoSet
 	}
 	// 7b. finish calculating H and convert into hours
 	var H float64
