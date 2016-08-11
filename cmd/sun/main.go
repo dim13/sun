@@ -34,18 +34,18 @@ func LatLon(lat, lon float64) string {
 func main() {
 	flag.Parse()
 
-	now := time.Now().Add(time.Duration(*day) * time.Hour * 24)
-
 	zone := latlong.LookupZoneName(*lat, *lon)
-	if zone != "" {
-		loc, err := time.LoadLocation(zone)
-		if err != nil {
-			log.Fatal(err)
-		}
-		now = now.In(loc)
+	loc, err := time.LoadLocation(zone)
+	if err != nil {
+		log.Fatal(err)
 	}
 
+	now := time.Now().In(loc).Add(time.Duration(*day) * time.Hour * 24)
+
 	fmt.Println("location", LatLon(*lat, *lon))
+	if zone == "" {
+		zone = "UTC"
+	}
 	fmt.Println("timezone", zone)
 
 	r, err := sun.Rise(now, *lat, *lon, sun.Official)
