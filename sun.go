@@ -81,8 +81,8 @@ func calc(tt time.Time, lat, lon, zen float64, rising bool) (time.Time, error) {
 const (
 	Official     = 90.0 + 50.0/60.0
 	Civil        = 96.0
-	Natical      = 102.0
-	Astronimical = 108.0
+	Nautical     = 102.0
+	Astronomical = 108.0
 )
 
 // Rise returns a sunrise time at given time, location and zenith position
