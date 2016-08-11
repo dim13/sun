@@ -15,9 +15,25 @@ var (
 	day = flag.Int("days", 0, "offset")
 )
 
+func LatLon(lat, lon float64) string {
+	LA := 'N'
+	LO := 'E'
+	if lat < 0.0 {
+		lat = -lat
+		LA = 'S'
+	}
+	if lon < 0.0 {
+		lon = -lon
+		LO = 'W'
+	}
+	return fmt.Sprintf("%v°%c %v°%c", lat, LA, lon, LO)
+}
+
 func main() {
 	flag.Parse()
 	now := time.Now().Add(time.Duration(*day) * time.Hour * 24)
+
+	fmt.Println("location", LatLon(*lat, *lon))
 
 	fail := func(err error) {
 		fmt.Println(err)
@@ -34,6 +50,6 @@ func main() {
 		fail(err)
 	}
 
-	fmt.Println("sunrise", r.Format(time.Stamp))
-	fmt.Println("sunset ", s.Format(time.Stamp))
+	fmt.Println("sunrise ", r.Format(time.RFC822))
+	fmt.Println("sunset  ", s.Format(time.RFC822))
 }
