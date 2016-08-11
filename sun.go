@@ -1,3 +1,4 @@
+// Package sun implements Sunrise/Sunset Algorithm
 package sun
 
 import (
@@ -34,7 +35,6 @@ func rad(deg float64) float64 { return deg * math.Pi / 180.0 }
 func deg(rad float64) float64 { return rad * 180.0 / math.Pi }
 
 func calc(tt time.Time, lat, lon, zen float64, rising bool) (time.Time, error) {
-
 	// 1. first calculate the day of the year
 	N := float64(dayOfYear(tt))
 	// 2. convert the longitude to hour value and calculate an approximate time
