@@ -12,11 +12,12 @@ import (
 var (
 	lat = flag.Float64("lat", 52.5200, "latitude")
 	lon = flag.Float64("lon", 13.4050, "longitude")
+	day = flag.Int("days", 0, "offset")
 )
 
 func main() {
 	flag.Parse()
-	now := time.Now()
+	now := time.Now().Add(time.Duration(*day) * time.Hour * 24)
 
 	fail := func(err error) {
 		fmt.Println(err)
@@ -33,6 +34,6 @@ func main() {
 		fail(err)
 	}
 
-	fmt.Println("sunrise", r)
-	fmt.Println("sunset ", s)
+	fmt.Println("sunrise", r.Format(time.RFC822))
+	fmt.Println("sunset ", s.Format(time.RFC822))
 }
