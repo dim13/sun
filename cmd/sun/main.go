@@ -3,8 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
+	"log"
 	"time"
+
+	"github.com/bradfitz/latlong"
 
 	"dim13.org/sun"
 )
@@ -31,25 +33,31 @@ func LatLon(lat, lon float64) string {
 
 func main() {
 	flag.Parse()
+
 	now := time.Now().Add(time.Duration(*day) * time.Hour * 24)
 
-	fmt.Println("location", LatLon(*lat, *lon))
-
-	fail := func(err error) {
-		fmt.Println(err)
-		os.Exit(0)
+	zone := latlong.LookupZoneName(*lat, *lon)
+	if zone != "" {
+		loc, err := time.LoadLocation(zone)
+		if err != nil {
+			log.Fatal(err)
+		}
+		now = now.In(loc)
 	}
+
+	fmt.Println("location", LatLon(*lat, *lon))
+	fmt.Println("timezone", zone)
 
 	r, err := sun.Rise(now, *lat, *lon, sun.Official)
 	if err != nil {
-		fail(err)
+		log.Fatal(err)
 	}
 
 	s, err := sun.Set(now, *lat, *lon, sun.Official)
 	if err != nil {
-		fail(err)
+		log.Fatal(err)
 	}
 
-	fmt.Println("sunrise ", r.Format(time.RFC822))
-	fmt.Println("sunset  ", s.Format(time.RFC822))
+	fmt.Println("sunrise ", r.Format(time.Stamp))
+	fmt.Println("sunset  ", s.Format(time.Stamp))
 }
