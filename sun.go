@@ -27,13 +27,13 @@ func fit(v float64, m float64) float64 {
 func rad(deg float64) float64 { return deg * math.Pi / 180.0 }
 func deg(rad float64) float64 { return rad * 180.0 / math.Pi }
 
-func calc(tt time.Time, lat, lon, zen float64, rise bool) (time.Time, error) {
+func calc(tt time.Time, lat, lon, zen float64, rising bool) (time.Time, error) {
 	// 1. first calculate the day of the year
 	N := float64(dayOfYear(tt))
 	// 2. convert the longitude to hour value and calculate an approximate time
 	lonHour := lon / 15.0
 	var t float64
-	if rise {
+	if rising {
 		t = N + (6.0-lonHour)/24.0
 	} else {
 		t = N + (18.0-lonHour)/24.0
@@ -63,7 +63,7 @@ func calc(tt time.Time, lat, lon, zen float64, rise bool) (time.Time, error) {
 	}
 	// 7b. finish calculating H and convert into hours
 	var H float64
-	if rise {
+	if rising {
 		H = 360.0 - deg(math.Acos(cosH))
 	} else {
 		H = deg(math.Acos(cosH))
@@ -77,6 +77,7 @@ func calc(tt time.Time, lat, lon, zen float64, rise bool) (time.Time, error) {
 	return tt.Truncate(24 * time.Hour).Add(time.Millisecond * time.Duration(UT*3600000.0)), nil
 }
 
+// Sun's zenith for sunrise/sunset
 const (
 	Official     = 90.0 + 50.0/60.0
 	Civil        = 96.0
@@ -84,10 +85,12 @@ const (
 	Astronimical = 108.0
 )
 
+// Rise returns a sunrise time at given time and location
 func Rise(t time.Time, lat, lon float64) (time.Time, error) {
 	return calc(t, lat, lon, Official, true)
 }
 
+// Set returns a sunset time at given time and location
 func Set(t time.Time, lat, lon float64) (time.Time, error) {
 	return calc(t, lat, lon, Official, false)
 }
