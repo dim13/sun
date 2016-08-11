@@ -34,6 +34,6 @@ func main() {
 		fail(err)
 	}
 
-	fmt.Println("sunrise", r.Format(time.RFC822))
-	fmt.Println("sunset ", s.Format(time.RFC822))
+	fmt.Println("sunrise", r.Format(time.RFC1123))
+	fmt.Println("sunset ", s.Format(time.RFC1123))
 }
