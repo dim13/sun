@@ -85,12 +85,12 @@ const (
 	Astronimical = 108.0
 )
 
-// Rise returns a sunrise time at given time and location
-func Rise(t time.Time, lat, lon float64) (time.Time, error) {
-	return calc(t, lat, lon, Official, true)
+// Rise returns a sunrise time at given time, location and zenith position
+func Rise(t time.Time, lat, lon, zenith float64) (time.Time, error) {
+	return calc(t, lat, lon, zenith, true)
 }
 
-// Set returns a sunset time at given time and location
-func Set(t time.Time, lat, lon float64) (time.Time, error) {
-	return calc(t, lat, lon, Official, false)
+// Set returns a sunset time at given time, location and zenith position
+func Set(t time.Time, lat, lon, zenith float64) (time.Time, error) {
+	return calc(t, lat, lon, zenith, false)
 }
