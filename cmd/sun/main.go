@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 	"time"
 
 	"dim13.org/sun"
@@ -17,15 +18,21 @@ func main() {
 	flag.Parse()
 	now := time.Now()
 
-	if r, err := sun.Rise(now, *lat, *lon, sun.Official); err != nil {
+	fail := func(err error) {
 		fmt.Println(err)
-	} else {
-		fmt.Println("sunrise", r)
+		os.Exit(0)
 	}
 
-	if s, err := sun.Set(now, *lat, *lon, sun.Official); err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println("sunset ", s)
+	r, err := sun.Rise(now, *lat, *lon, sun.Official)
+	if err != nil {
+		fail(err)
 	}
+
+	s, err := sun.Set(now, *lat, *lon, sun.Official)
+	if err != nil {
+		fail(err)
+	}
+
+	fmt.Println("sunrise", r)
+	fmt.Println("sunset ", s)
 }
