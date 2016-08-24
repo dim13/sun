@@ -1,3 +1,4 @@
+// Show sunrise and sunset on given location
 package main
 
 import (
