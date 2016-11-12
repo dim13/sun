@@ -49,12 +49,12 @@ func main() {
 	}
 	fmt.Println("timezone", zone)
 
-	r, err := sun.Rise(now, *lat, *lon, sun.Official)
+	r, err := sun.Rise(now, *lat, *lon)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	s, err := sun.Set(now, *lat, *lon, sun.Official)
+	s, err := sun.Set(now, *lat, *lon)
 	if err != nil {
 		log.Fatal(err)
 	}

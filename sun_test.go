@@ -16,7 +16,7 @@ func TestDayOfYear(t *testing.T) {
 }
 
 func TestRise(t *testing.T) {
-	r, err := Rise(time.Now(), lat, lon, Official)
+	r, err := Rise(time.Now(), lat, lon)
 	if err != nil {
 		t.Error(err)
 	}
@@ -24,7 +24,7 @@ func TestRise(t *testing.T) {
 }
 
 func TestSet(t *testing.T) {
-	s, err := Set(time.Now(), lat, lon, Official)
+	s, err := Set(time.Now(), lat, lon)
 	if err != nil {
 		t.Error(err)
 	}

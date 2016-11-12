@@ -84,20 +84,33 @@ func calc(tt time.Time, lat, lon, zen float64, rising bool) (time.Time, error) {
 	return tt.Truncate(24 * time.Hour).Add(time.Millisecond * time.Duration(UT*3600000.0)), nil
 }
 
+// Zenith for sunrise/sunset
+type Zenith float64
+
 // Sun's zenith for sunrise/sunset
 const (
-	Official     = 90.0 + 50.0/60.0
-	Civil        = 96.0
-	Nautical     = 102.0
-	Astronomical = 108.0
+	Official     Zenith = 90.0 + 50.0/60.0
+	Civil        Zenith = 96.0
+	Nautical     Zenith = 102.0
+	Astronomical Zenith = 108.0
 )
 
-// Rise returns a sunrise time at given time, location and zenith position
-func Rise(t time.Time, lat, lon, zenith float64) (time.Time, error) {
-	return calc(t, lat, lon, zenith, true)
+// Rise returns a sunrise time at given time, location on given zenith
+func (z Zenith) Rise(t time.Time, lat, lon float64) (time.Time, error) {
+	return calc(t, lat, lon, float64(z), true)
 }
 
-// Set returns a sunset time at given time, location and zenith position
-func Set(t time.Time, lat, lon, zenith float64) (time.Time, error) {
-	return calc(t, lat, lon, zenith, false)
+// Set returns a sunset time at given time, location on given zenith
+func (z Zenith) Set(t time.Time, lat, lon float64) (time.Time, error) {
+	return calc(t, lat, lon, float64(z), false)
+}
+
+// Rise returns a sunrise time at given time, location on official zenith
+func Rise(t time.Time, lat, lon float64) (time.Time, error) {
+	return Official.Rise(t, lat, lon)
+}
+
+// Set returns a sunset time at given time, location on official zenith
+func Set(t time.Time, lat, lon float64) (time.Time, error) {
+	return Official.Set(t, lat, lon)
 }
