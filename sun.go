@@ -79,9 +79,9 @@ func calc(tt time.Time, lat, lon, zen float64, rising bool) (time.Time, error) {
 	// 8. calculate local mean time of rising/setting
 	T := H + RA - 0.06571*t - 6.622
 	// 9. adjust back to UTC
-	UT := fit(T-lonHour, 24.0)
+	UT := fit(T-lonHour, 24.0) * float64(time.Hour)
 	// 10. convert UT value to local time zone of latitude/longitude
-	return tt.Truncate(24 * time.Hour).Add(time.Millisecond * time.Duration(UT*3600000.0)), nil
+	return tt.Truncate(24 * time.Hour).Add(time.Duration(UT)), nil
 }
 
 // Zenith for sunrise/sunset
