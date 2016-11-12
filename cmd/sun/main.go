@@ -18,7 +18,7 @@ var (
 	day = flag.Int("days", 0, "offset")
 )
 
-func LatLon(lat, lon float64) string {
+func latLon(lat, lon float64) string {
 	LA := 'N'
 	LO := 'E'
 	if lat < 0.0 {
@@ -43,7 +43,7 @@ func main() {
 
 	now := time.Now().In(loc).Add(time.Duration(*day) * time.Hour * 24)
 
-	fmt.Println("location", LatLon(*lat, *lon))
+	fmt.Println("location", latLon(*lat, *lon))
 	if zone == "" {
 		zone = "UTC"
 	}
