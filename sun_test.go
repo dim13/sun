@@ -59,3 +59,25 @@ func TestSet(t *testing.T) {
 		t.Errorf("expected %v, got %v", set, ss)
 	}
 }
+
+func TestNoRise(t *testing.T) {
+	date, err := time.Parse(time.RFC3339, when)
+	if err != nil {
+		t.Fatal(err)
+	}
+	s, err := Set(date, 90.0, lon)
+	if err != ErrNoRise {
+		t.Errorf("expected %v, got %v", ErrNoRise, s)
+	}
+}
+
+func TestNoSet(t *testing.T) {
+	date, err := time.Parse(time.RFC3339, when)
+	if err != nil {
+		t.Fatal(err)
+	}
+	s, err := Set(date, -90.0, lon)
+	if err != ErrNoSet {
+		t.Errorf("expected %v, got %v", ErrNoSet, s)
+	}
+}
