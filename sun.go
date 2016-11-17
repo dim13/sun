@@ -21,8 +21,9 @@ func dayOfYear(t time.Time) int {
 	return N1 - (N2 * N3) + d - 30
 }
 
-func rad(deg float64) float64 { return deg * math.Pi / 180.0 }
-func deg(rad float64) float64 { return rad * 180.0 / math.Pi }
+func mod(v, m float64) float64 { return math.Mod(v+m, m) }
+func rad(deg float64) float64  { return deg * math.Pi / 180.0 }
+func deg(rad float64) float64  { return rad * 180.0 / math.Pi }
 
 type mode int
 
@@ -32,7 +33,6 @@ const (
 )
 
 func calc(tt time.Time, lat, lon, zen float64, m mode) (time.Time, error) {
-	mod := func(v, m float64) float64 { return math.Mod(v+m, m) }
 	// 1. first calculate the day of the year
 	N := float64(dayOfYear(tt))
 	// 2. convert the longitude to hour value and calculate an approximate time
