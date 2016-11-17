@@ -32,7 +32,7 @@ const (
 )
 
 func calc(tt time.Time, lat, lon, zen float64, m mode) (time.Time, error) {
-	mod := func(v float64, m float64) float64 { return math.Mod(v+m, m) }
+	mod := func(v, m float64) float64 { return math.Mod(v+m, m) }
 	// 1. first calculate the day of the year
 	N := float64(dayOfYear(tt))
 	// 2. convert the longitude to hour value and calculate an approximate time
