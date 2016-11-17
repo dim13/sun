@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-// Error values if sun not rises or sets at speciefied date
+// Error values if sun not rises or sets at speciefied date and location
 var (
 	ErrNoRise = errors.New("the sun never rises on this location (on the specified date)")
 	ErrNoSet  = errors.New("the sun never sets on this location (on the specified date)")
