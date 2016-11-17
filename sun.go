@@ -21,7 +21,7 @@ func dayOfYear(t time.Time) int {
 	return N1 - (N2 * N3) + d - 30
 }
 
-func fit(v float64, m float64) float64 {
+func mod(v float64, m float64) float64 {
 	for v >= m {
 		v -= m
 	}
@@ -56,9 +56,9 @@ func calc(tt time.Time, lat, lon, zen float64, m mode) (time.Time, error) {
 	// 3. calculate the Sun's mean anomaly
 	M := 0.9856*t - 3.289
 	// 4. calculate the Sun's true longitude
-	L := fit(M+1.916*math.Sin(rad(M))+0.020*math.Sin(2*rad(M))+282.634, 360.0)
+	L := mod(M+1.916*math.Sin(rad(M))+0.020*math.Sin(2*rad(M))+282.634, 360.0)
 	// 5a. calculate the Sun's right ascension
-	RA := fit(deg(math.Atan(0.91764*math.Tan(rad(L)))), 360.0)
+	RA := mod(deg(math.Atan(0.91764*math.Tan(rad(L)))), 360.0)
 	// 5b. right ascension value needs to be in the same quadrant as L
 	Lquad := math.Floor(L/90.0) * 90.0
 	RAquad := math.Floor(RA/90.0) * 90.0
@@ -88,7 +88,7 @@ func calc(tt time.Time, lat, lon, zen float64, m mode) (time.Time, error) {
 	// 8. calculate local mean time of rising/setting
 	T := H + RA - 0.06571*t - 6.622
 	// 9. adjust back to UTC
-	UT := fit(T-lonHour, 24.0) * float64(time.Hour)
+	UT := mod(T-lonHour, 24.0) * float64(time.Hour)
 	// 10. convert UT value to local time zone of latitude/longitude
 	return tt.Truncate(24 * time.Hour).Add(time.Duration(UT)), nil
 }
