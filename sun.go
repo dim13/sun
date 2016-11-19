@@ -13,9 +13,8 @@ var (
 	ErrNoSet  = errors.New("the sun never sets on this location (on the specified date)")
 )
 
-func mod(v, m float64) float64 { return math.Mod(v+m, m) }
-func rad(deg float64) float64  { return deg * math.Pi / 180.0 }
-func deg(rad float64) float64  { return rad * 180.0 / math.Pi }
+func rad(deg float64) float64 { return deg * math.Pi / 180.0 }
+func deg(rad float64) float64 { return rad * 180.0 / math.Pi }
 
 type mode int
 
@@ -39,9 +38,9 @@ func calc(tt time.Time, lat, lon, zen float64, m mode) (time.Time, error) {
 	// 3. calculate the Sun's mean anomaly
 	M := 0.9856*t - 3.289
 	// 4. calculate the Sun's true longitude
-	L := mod(M+1.916*math.Sin(rad(M))+0.020*math.Sin(2*rad(M))+282.634, 360.0)
+	L := M + 1.916*math.Sin(rad(M)) + 0.020*math.Sin(2*rad(M)) + 282.634
 	// 5a. calculate the Sun's right ascension
-	RA := mod(deg(math.Atan(0.91764*math.Tan(rad(L)))), 360.0)
+	RA := deg(math.Atan(0.91764 * math.Tan(rad(L))))
 	// 5b. right ascension value needs to be in the same quadrant as L
 	Lquad := math.Floor(L/90.0) * 90.0
 	RAquad := math.Floor(RA/90.0) * 90.0
@@ -71,7 +70,7 @@ func calc(tt time.Time, lat, lon, zen float64, m mode) (time.Time, error) {
 	// 8. calculate local mean time of rising/setting
 	T := H + RA - 0.06571*t - 6.622
 	// 9. adjust back to UTC
-	UT := mod(T-lonHour, 24.0) * float64(time.Hour)
+	UT := math.Mod(T-lonHour, 24.0) * float64(time.Hour)
 	// 10. convert UT value to local time zone of latitude/longitude
 	return tt.Truncate(24 * time.Hour).Add(time.Duration(UT)), nil
 }
