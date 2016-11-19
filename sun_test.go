@@ -8,12 +8,18 @@ import (
 const when = "2009-11-10T23:00:00Z"
 
 var testCases = []struct {
+	place     string
 	lat, lon  float64
 	rise, set string
 }{
-	{+52.5200, +13.4050, "2009-11-10T07:18:22+01:00", "2009-11-10T16:21:24+01:00"},
-	{+40.7300, -73.9352, "2009-11-10T06:36:25-05:00", "2009-11-10T16:42:26-05:00"},
-	{-33.8679, 151.2073, "2009-11-10T05:47:34+11:00", "2009-11-10T19:31:00+11:00"},
+	{"Berlin", 52.5200, 13.4050,
+		"2009-11-10T07:18:22+01:00", "2009-11-10T16:21:24+01:00"},
+	{"NewYork", 40.7300, -73.9352,
+		"2009-11-10T06:36:25-05:00", "2009-11-10T16:42:26-05:00"},
+	{"Sydney", -33.8679, 151.2073,
+		"2009-11-10T05:47:34+11:00", "2009-11-10T19:31:00+11:00"},
+	{"Honolulu", 21.3069, -157.8583,
+		"2009-11-10T06:39:19-10:00", "2009-11-10T17:51:16-10:00"},
 }
 
 func testDate(t *testing.T) time.Time {
@@ -36,7 +42,7 @@ func TestRise(t *testing.T) {
 			t.Fatal(err)
 		}
 		if !r.Truncate(time.Second).Equal(sr) {
-			t.Errorf("expected %v, got %v", sr, r)
+			t.Errorf("%v: expected %v, got %v", tc.place, sr, r)
 		}
 	}
 }
@@ -53,7 +59,7 @@ func TestSet(t *testing.T) {
 			t.Fatal(err)
 		}
 		if !s.Truncate(time.Second).Equal(ss) {
-			t.Errorf("expected %v, got %v", ss, s)
+			t.Errorf("%v: expected %v, got %v", tc.place, ss, s)
 		}
 	}
 }
