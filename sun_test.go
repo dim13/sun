@@ -41,8 +41,9 @@ func TestRise(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if !r.Truncate(time.Second).Equal(sr) {
-			t.Errorf("%v: expected %v, got %v", tc.place, sr, r)
+		if r = r.Truncate(time.Second); !r.Equal(sr) {
+			t.Errorf("%v: expected %v, got %v",
+				tc.place, sr.UTC(), r)
 		}
 	}
 }
@@ -58,8 +59,9 @@ func TestSet(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if !s.Truncate(time.Second).Equal(ss) {
-			t.Errorf("%v: expected %v, got %v", tc.place, ss, s)
+		if s = s.Truncate(time.Second); !s.Equal(ss) {
+			t.Errorf("%v: expected %v, got %v",
+				tc.place, ss.UTC(), s)
 		}
 	}
 }
