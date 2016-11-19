@@ -81,7 +81,7 @@ Inputs:
 
 7b. finish calculating H and convert into hours
 	
-	if if rising time is desired:
+	if rising time is desired:
 	  H = 360 - acos(cosH)
 	if setting time is desired:
 	  H = acos(cosH)
