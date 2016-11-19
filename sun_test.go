@@ -24,14 +24,6 @@ func testDate(t *testing.T) time.Time {
 	return date
 }
 
-func TestDayOfYear(t *testing.T) {
-	date := testDate(t)
-	d := dayOfYear(date)
-	if d != 314 {
-		t.Errorf("expected 314, got %v", d)
-	}
-}
-
 func TestRise(t *testing.T) {
 	date := testDate(t)
 	for _, tc := range testCases {

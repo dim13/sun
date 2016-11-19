@@ -13,14 +13,6 @@ var (
 	ErrNoSet  = errors.New("the sun never sets on this location (on the specified date)")
 )
 
-func dayOfYear(t time.Time) int {
-	d, m, y := t.Day(), int(t.Month()), t.Year()
-	N1 := 275 * m / 9
-	N2 := (m + 9) / 12
-	N3 := 1 + (y-4*(y/4)+2)/3
-	return N1 - (N2 * N3) + d - 30
-}
-
 func mod(v, m float64) float64 { return math.Mod(v+m, m) }
 func rad(deg float64) float64  { return deg * math.Pi / 180.0 }
 func deg(rad float64) float64  { return rad * 180.0 / math.Pi }
@@ -34,7 +26,7 @@ const (
 
 func calc(tt time.Time, lat, lon, zen float64, m mode) (time.Time, error) {
 	// 1. first calculate the day of the year
-	N := float64(dayOfYear(tt))
+	N := float64(tt.YearDay())
 	// 2. convert the longitude to hour value and calculate an approximate time
 	lonHour := lon / 15.0
 	var t float64
