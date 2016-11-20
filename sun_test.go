@@ -31,16 +31,11 @@ var testCases = []struct {
 		"2009-11-10T05:26:37-12:00", "2009-11-10T17:33:10-12:00"},
 }
 
-func testDate(t *testing.T) time.Time {
+func TestRise(t *testing.T) {
 	date, err := time.Parse(time.RFC3339, when)
 	if err != nil {
-		t.Fatal(err)
+		t.Error(err)
 	}
-	return date
-}
-
-func TestRise(t *testing.T) {
-	date := testDate(t)
 	for _, tc := range testCases {
 		r, err := Rise(date, tc.lat, tc.lon)
 		if err != nil {
@@ -58,7 +53,10 @@ func TestRise(t *testing.T) {
 }
 
 func TestSet(t *testing.T) {
-	date := testDate(t)
+	date, err := time.Parse(time.RFC3339, when)
+	if err != nil {
+		t.Error(err)
+	}
 	for _, tc := range testCases {
 		s, err := Set(date, tc.lat, tc.lon)
 		if err != nil {
@@ -76,7 +74,10 @@ func TestSet(t *testing.T) {
 }
 
 func TestNoRise(t *testing.T) {
-	date := testDate(t)
+	date, err := time.Parse(time.RFC3339, when)
+	if err != nil {
+		t.Error(err)
+	}
 	s, err := Set(date, 90.0, 0.0)
 	if err != ErrNoRise {
 		t.Errorf("expected %v, got %v", ErrNoRise, s)
@@ -84,9 +85,32 @@ func TestNoRise(t *testing.T) {
 }
 
 func TestNoSet(t *testing.T) {
-	date := testDate(t)
+	date, err := time.Parse(time.RFC3339, when)
+	if err != nil {
+		t.Error(err)
+	}
 	s, err := Set(date, -90.0, 0.0)
 	if err != ErrNoSet {
 		t.Errorf("expected %v, got %v", ErrNoSet, s)
+	}
+}
+
+func BenchmarkRise(b *testing.B) {
+	date, err := time.Parse(time.RFC3339, when)
+	if err != nil {
+		b.Error(err)
+	}
+	for i := 0; i < b.N; i++ {
+		Rise(date, 0.0, 0.0)
+	}
+}
+
+func BenchmarkSet(b *testing.B) {
+	date, err := time.Parse(time.RFC3339, when)
+	if err != nil {
+		b.Error(err)
+	}
+	for i := 0; i < b.N; i++ {
+		Set(date, 0.0, 0.0)
 	}
 }
