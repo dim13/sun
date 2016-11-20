@@ -27,12 +27,11 @@ func calc(tt time.Time, lat, lon, zen float64, m mode) (time.Time, error) {
 	// 1. first calculate the day of the year
 	N := float64(tt.YearDay())
 	// 2. convert the longitude to hour value and calculate an approximate time
-	lonHour := lon / 15.0
 	switch m {
 	case rising:
-		N += (6.0 - lonHour) / 24.0
+		N += (6.0 - lon/15.0) / 24.0
 	case setting:
-		N += (18.0 - lonHour) / 24.0
+		N += (18.0 - lon/15.0) / 24.0
 	}
 	// 3. calculate the Sun's mean anomaly
 	M := 0.9856*N - 3.289
@@ -56,15 +55,14 @@ func calc(tt time.Time, lat, lon, zen float64, m mode) (time.Time, error) {
 		return time.Time{}, ErrNoSet
 	}
 	// 7b. finish calculating H and convert into hours
-	H := deg(math.Acos(cosH))
+	H := deg(math.Acos(cosH)) / 15.0
 	if m == rising {
 		H = -H
 	}
-	H /= 15.0
 	// 8. calculate local mean time of rising/setting
 	T := math.Mod(H+RA-0.06571*N-6.622, 24.0)
 	// 9. adjust back to UTC
-	UT := (T - lonHour) * float64(time.Hour)
+	UT := (T - lon/15.0) * float64(time.Hour)
 	// 10. convert UT value to local time zone of latitude/longitude
 	return tt.Truncate(24 * time.Hour).Add(time.Duration(UT)), nil
 }
