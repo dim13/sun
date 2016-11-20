@@ -59,7 +59,7 @@ func calc(t time.Time, lat, lon, zen float64, rising bool) (time.Time, error) {
 	return t.Truncate(24 * time.Hour).Add(time.Duration(UT)), nil
 }
 
-// Zenith for sunrise/sunset
+// Zenith for sunrise/sunset (degree)
 type Zenith float64
 
 // Sun's zenith for sunrise/sunset
