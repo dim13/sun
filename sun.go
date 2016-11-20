@@ -70,22 +70,22 @@ const (
 	Astronomical Zenith = 108.0
 )
 
-// Rise returns a sunrise time at given time, location on given zenith
+// Rise returns a sunrise time at given time and location on given zenith
 func (z Zenith) Rise(t time.Time, lat, lon float64) (time.Time, error) {
 	return calc(t, lat, lon, float64(z), true)
 }
 
-// Set returns a sunset time at given time, location on given zenith
+// Set returns a sunset time at given time and location on given zenith
 func (z Zenith) Set(t time.Time, lat, lon float64) (time.Time, error) {
 	return calc(t, lat, lon, float64(z), false)
 }
 
-// Rise returns a sunrise time at given time, location on official zenith
+// Rise returns a sunrise time at given time and location on official zenith
 func Rise(t time.Time, lat, lon float64) (time.Time, error) {
 	return Official.Rise(t, lat, lon)
 }
 
-// Set returns a sunset time at given time, location on official zenith
+// Set returns a sunset time at given time and location on official zenith
 func Set(t time.Time, lat, lon float64) (time.Time, error) {
 	return Official.Set(t, lat, lon)
 }
