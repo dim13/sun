@@ -16,9 +16,9 @@ var (
 func rad(deg float64) float64 { return deg * math.Pi / 180.0 }
 func deg(rad float64) float64 { return rad * 180.0 / math.Pi }
 
-func calc(tt time.Time, lat, lon, zen float64, rising bool) (time.Time, error) {
+func calc(t time.Time, lat, lon, zen float64, rising bool) (time.Time, error) {
 	// 1. first calculate the day of the year
-	N := float64(tt.YearDay())
+	N := float64(t.YearDay())
 	// 2. convert the longitude to hour value and calculate an approximate time
 	if rising {
 		N += (6.0 - lon/15.0) / 24.0
@@ -56,7 +56,7 @@ func calc(tt time.Time, lat, lon, zen float64, rising bool) (time.Time, error) {
 	// 9. adjust back to UTC
 	UT := (T - lon/15.0) * float64(time.Hour)
 	// 10. convert UT value to local time zone of latitude/longitude
-	return tt.Truncate(24 * time.Hour).Add(time.Duration(UT)), nil
+	return t.Truncate(24 * time.Hour).Add(time.Duration(UT)), nil
 }
 
 // Zenith for sunrise/sunset
