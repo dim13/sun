@@ -24,7 +24,6 @@ Inputs:
 	= (180/pi)*atan(0.91764 * tan((pi/180)*L)) to give a degree
 	answer with a degree input for L.
 
-
 1. first calculate the day of the year
 
 	N1 = floor(275 * month / 9)
@@ -100,3 +99,4 @@ Inputs:
 10. convert UT value to local time zone of latitude/longitude
 
 	localT = UT + localOffset
+
