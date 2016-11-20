@@ -16,21 +16,13 @@ var (
 func rad(deg float64) float64 { return deg * math.Pi / 180.0 }
 func deg(rad float64) float64 { return rad * 180.0 / math.Pi }
 
-type mode int
-
-const (
-	rising mode = iota
-	setting
-)
-
-func calc(tt time.Time, lat, lon, zen float64, m mode) (time.Time, error) {
+func calc(tt time.Time, lat, lon, zen float64, rising bool) (time.Time, error) {
 	// 1. first calculate the day of the year
 	N := float64(tt.YearDay())
 	// 2. convert the longitude to hour value and calculate an approximate time
-	switch m {
-	case rising:
+	if rising {
 		N += (6.0 - lon/15.0) / 24.0
-	case setting:
+	} else {
 		N += (18.0 - lon/15.0) / 24.0
 	}
 	// 3. calculate the Sun's mean anomaly
@@ -56,7 +48,7 @@ func calc(tt time.Time, lat, lon, zen float64, m mode) (time.Time, error) {
 	}
 	// 7b. finish calculating H and convert into hours
 	H := deg(math.Acos(cosH)) / 15.0
-	if m == rising {
+	if rising {
 		H = -H
 	}
 	// 8. calculate local mean time of rising/setting
@@ -80,12 +72,12 @@ const (
 
 // Rise returns a sunrise time at given time, location on given zenith
 func (z Zenith) Rise(t time.Time, lat, lon float64) (time.Time, error) {
-	return calc(t, lat, lon, float64(z), rising)
+	return calc(t, lat, lon, float64(z), true)
 }
 
 // Set returns a sunset time at given time, location on given zenith
 func (z Zenith) Set(t time.Time, lat, lon float64) (time.Time, error) {
-	return calc(t, lat, lon, float64(z), setting)
+	return calc(t, lat, lon, float64(z), false)
 }
 
 // Rise returns a sunrise time at given time, location on official zenith
