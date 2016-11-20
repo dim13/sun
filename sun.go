@@ -42,9 +42,7 @@ func calc(tt time.Time, lat, lon, zen float64, m mode) (time.Time, error) {
 	// 5a. calculate the Sun's right ascension
 	RA := deg(math.Atan(0.91764 * math.Tan(rad(L))))
 	// 5b. right ascension value needs to be in the same quadrant as L
-	Lquad := math.Floor(L/90.0) * 90.0
-	RAquad := math.Floor(RA/90.0) * 90.0
-	RA += Lquad - RAquad
+	RA += math.Floor(L/90.0)*90.0 - math.Floor(RA/90.0)*90.0
 	// 5c. right ascension value needs to be converted into hours
 	RA /= 15.0
 	// 6. calculate the Sun's declination
@@ -68,9 +66,9 @@ func calc(tt time.Time, lat, lon, zen float64, m mode) (time.Time, error) {
 	}
 	H /= 15.0
 	// 8. calculate local mean time of rising/setting
-	T := H + RA - 0.06571*t - 6.622
+	T := math.Mod(H+RA-0.06571*t-6.622, 24.0)
 	// 9. adjust back to UTC
-	UT := math.Mod(T-lonHour, 24.0) * float64(time.Hour)
+	UT := (T - lonHour) * float64(time.Hour)
 	// 10. convert UT value to local time zone of latitude/longitude
 	return tt.Truncate(24 * time.Hour).Add(time.Duration(UT)), nil
 }
