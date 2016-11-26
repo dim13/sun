@@ -24,7 +24,7 @@ var testCases = []struct {
 	{"Johannesburg", -26.2041, 28.0473, testDate,
 		"2009-11-10T05:13:05+02:00", "2009-11-10T18:30:42+02:00", nil},
 	// Odd places
-	{"null", 0.0, 0.0, testDate,
+	{"Null Island", 0.0, 0.0, testDate,
 		"2009-11-10T05:40:25Z", "2009-11-10T17:47:27Z", nil},
 	{"Kiritimati", 1.8721, -157.4278, testDate,
 		"2009-11-11T06:12:29+14:00", "2009-11-11T18:14:52+14:00", nil},
