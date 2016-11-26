@@ -31,9 +31,9 @@ var testCases = []struct {
 	{"Baker Island", 0.1936, -176.4769, testDate,
 		"2009-11-10T05:26:37-12:00", "2009-11-10T17:33:10-12:00", nil},
 	// Errors
-	{"North Pol", 90.0, 0.0, testDate,
+	{"North Pole", 90.0, 0.0, testDate,
 		"0001-01-01T00:00:00Z", "0001-01-01T00:00:00Z", ErrNoRise},
-	{"South Pol", -90.0, 0.0, testDate,
+	{"South Pole", -90.0, 0.0, testDate,
 		"0001-01-01T00:00:00Z", "0001-01-01T00:00:00Z", ErrNoSet},
 }
 
