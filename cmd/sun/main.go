@@ -9,7 +9,7 @@ import (
 
 	"github.com/bradfitz/latlong"
 
-	"dim13.org/sun"
+	"github.com/dim13/sun"
 )
 
 var (
