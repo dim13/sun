@@ -37,23 +37,26 @@ var testCases = []struct {
 		"0001-01-01T00:00:00Z", "0001-01-01T00:00:00Z", ErrNoSet},
 }
 
+func toTime(tb testing.TB, v string) time.Time {
+	tb.Helper()
+	date, err := time.Parse(time.RFC3339, v)
+	if err != nil {
+		tb.Fatal(err)
+	}
+	return date
+}
+
 func TestRise(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.place, func(t *testing.T) {
-			date, err := time.Parse(time.RFC3339, tc.date)
-			if err != nil {
-				t.Error(err)
-			}
+			date := toTime(t, tc.date)
 			r, err := Rise(date, tc.lat, tc.lon)
 			if err != tc.err {
 				t.Errorf("got %v; want %v", err, tc.err)
 			}
-			sr, err := time.Parse(time.RFC3339, tc.rise)
-			if err != nil {
-				t.Fatal(err)
-			}
-			if r = r.Truncate(time.Second); !r.Equal(sr) {
-				t.Errorf("got %v; want %v", r, sr.UTC())
+			rise := toTime(t, tc.rise)
+			if r = r.Truncate(time.Second); !r.Equal(rise) {
+				t.Errorf("got %v; want %v", r, rise.UTC())
 			}
 		})
 	}
@@ -62,20 +65,14 @@ func TestRise(t *testing.T) {
 func TestSet(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.place, func(t *testing.T) {
-			date, err := time.Parse(time.RFC3339, tc.date)
-			if err != nil {
-				t.Error(err)
-			}
+			date := toTime(t, tc.date)
 			s, err := Set(date, tc.lat, tc.lon)
 			if err != tc.err {
 				t.Errorf("got %v; want %v", err, tc.err)
 			}
-			ss, err := time.Parse(time.RFC3339, tc.set)
-			if err != nil {
-				t.Fatal(err)
-			}
-			if s = s.Truncate(time.Second); !s.Equal(ss) {
-				t.Errorf("got %v; want %v", s, ss.UTC())
+			set := toTime(t, tc.set)
+			if s = s.Truncate(time.Second); !s.Equal(set) {
+				t.Errorf("got %v; want %v", s, set.UTC())
 			}
 		})
 	}
@@ -84,10 +81,7 @@ func TestSet(t *testing.T) {
 func BenchmarkRise(b *testing.B) {
 	for _, tc := range testCases {
 		b.Run(tc.place, func(b *testing.B) {
-			date, err := time.Parse(time.RFC3339, tc.date)
-			if err != nil {
-				b.Error(err)
-			}
+			date := toTime(b, tc.date)
 			for i := 0; i < b.N; i++ {
 				Rise(date, tc.lat, tc.lon)
 			}
@@ -98,10 +92,7 @@ func BenchmarkRise(b *testing.B) {
 func BenchmarkSet(b *testing.B) {
 	for _, tc := range testCases {
 		b.Run(tc.place, func(b *testing.B) {
-			date, err := time.Parse(time.RFC3339, tc.date)
-			if err != nil {
-				b.Error(err)
-			}
+			date := toTime(b, tc.date)
 			for i := 0; i < b.N; i++ {
 				Set(date, tc.lat, tc.lon)
 			}
