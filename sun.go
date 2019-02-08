@@ -1,4 +1,4 @@
-// Package sun implements Sunrise/Sunset Algorithm
+// Package sun implements Sunrise/Sunset time calculation Algorithm
 package sun
 
 import (
