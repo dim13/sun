@@ -49,7 +49,7 @@ var testCases = []struct {
 		day:   parseDuration("9h9m43s"),
 	},
 	{
-		place: "NewYork",
+		place: "New York",
 		lat:   40.7300,
 		lon:   -73.9352,
 		date:  parseTime("2009-11-10T23:00:00Z"),
