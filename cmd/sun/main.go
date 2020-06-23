@@ -20,11 +20,11 @@ var (
 
 func latLon(lat, lon float64) string {
 	LA := 'N'
-	LO := 'E'
 	if lat < 0.0 {
 		lat = -lat
 		LA = 'S'
 	}
+	LO := 'E'
 	if lon < 0.0 {
 		lon = -lon
 		LO = 'W'
@@ -43,22 +43,21 @@ func main() {
 
 	now := time.Now().In(loc).Add(time.Duration(*day) * time.Hour * 24)
 
-	fmt.Println("location", latLon(*lat, *lon))
-	if zone == "" {
-		zone = "UTC"
-	}
-	fmt.Println("timezone", zone)
-
-	r, err := sun.Rise(now, *lat, *lon)
+	sunRise, err := sun.Rise(now, *lat, *lon)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	s, err := sun.Set(now, *lat, *lon)
+	sunSet, err := sun.Set(now, *lat, *lon)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Println("sunrise ", r.Format(time.Stamp))
-	fmt.Println("sunset  ", s.Format(time.Stamp))
+	dayDuration := sunSet.Sub(sunRise).Truncate(time.Second)
+
+	fmt.Println("location    ", latLon(*lat, *lon))
+	fmt.Println("timezone    ", loc)
+	fmt.Println("sun rise    ", sunRise.Format(time.Stamp))
+	fmt.Println("sun set     ", sunSet.Format(time.Stamp))
+	fmt.Println("day duration", dayDuration)
 }
