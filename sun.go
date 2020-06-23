@@ -80,6 +80,19 @@ func (z Zenith) Set(t time.Time, lat, lon float64) (time.Time, error) {
 	return calc(t, lat, lon, float64(z), false)
 }
 
+// Day duration at given time and location on given zenith
+func (z Zenith) Day(t time.Time, lat, lon float64) time.Duration {
+	rise, err := z.Rise(t, lat, lon)
+	if err == ErrNoRise {
+		return 0
+	}
+	set, err := z.Set(t, lat, lon)
+	if err == ErrNoSet {
+		return time.Hour * 24
+	}
+	return set.Sub(rise)
+}
+
 // Rise returns a sunrise time at given time and location on official zenith
 func Rise(t time.Time, lat, lon float64) (time.Time, error) {
 	return Official.Rise(t, lat, lon)
@@ -88,4 +101,9 @@ func Rise(t time.Time, lat, lon float64) (time.Time, error) {
 // Set returns a sunset time at given time and location on official zenith
 func Set(t time.Time, lat, lon float64) (time.Time, error) {
 	return Official.Set(t, lat, lon)
+}
+
+// Day duration at given time and location on official zenith
+func Day(t time.Time, lat, lon float64) time.Duration {
+	return Official.Day(t, lat, lon)
 }
