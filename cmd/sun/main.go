@@ -29,7 +29,7 @@ func latLon(lat, lon float64) string {
 		lon = -lon
 		LO = 'W'
 	}
-	return fmt.Sprintf("%v°%c %v°%c", lat, LA, lon, LO)
+	return fmt.Sprintf("%.4f°%c %.4f°%c", lat, LA, lon, LO)
 }
 
 func main() {
